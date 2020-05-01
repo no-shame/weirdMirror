@@ -4,9 +4,9 @@ const video = document.getElementById('video')
 const videoBlur = document.getElementById('videoBlur')
 
 Promise.all([
-  faceapi.nets.tinyFaceDetector.loadFromUri('/'),
-  faceapi.nets.faceLandmark68Net.loadFromUri('/'),
-  faceapi.nets.faceLandmark68TinyNet.loadFromUri('/')
+  faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+  faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models')
 ]).then(startVideo)
 
 
