@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script defer src="face-api.min.js"></script>
+  <script defer src="script.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    video{
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+      opacity:100;
+      position:absolute;
+    }
+
+    #video{
+      display:none;
+    }
+
+
+    #videoBlur {
+      transform: scale(1.2)
+      transform: scaleX(2.2);
+      -webkit-filter: blur(12px); /* Safari 6.0 - 9.0 */
+      filter: blur(12px);
+    }
+
+    canvas {
+      position: absolute;
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+    }
+
+
+
+
+    /*Links*/
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+
+
+        position: absolute;
+        bottom: 10%;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        text-align: center;
+        padding: 16px;
+      }
+
+      li a:hover {
+
+      }
+  </style>
+</head>
+<body>
+
+  <video id="videoBlur" width="729" height="560" autoplay muted></video>
+  <video id="video" width="720" height="560" autoplay muted></video>
+  
+  <ul>
+    <li><a href="#home">Item 0</a></li>
+    <li><a href="#news">Item 1</a></li>
+    <li><a href="#contact">Item 2</a></li>
+    <li><a href="#about">Item 3</a></li>
+  </ul>
+
+</body>
+</html>
