@@ -1,3 +1,5 @@
+console.log();
+
 const video = document.getElementById('video')
 const videoBlur = document.getElementById('videoBlur')
 
@@ -71,6 +73,7 @@ video.addEventListener('play', () => {
      
      
      ctx.save();
+
 
 
 
