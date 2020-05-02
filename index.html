@@ -34,8 +34,8 @@
     #videoBlur {
       transform: scale(1.2)
       transform: scaleX(2.2);
-      -webkit-filter: blur(12px); /* Safari 6.0 - 9.0 */
-      filter: blur(12px);
+      -webkit-filter: blur(0px); /* Safari 6.0 - 9.0 */
+      filter: blur(0px);
     }
 
     canvas {
@@ -45,7 +45,10 @@
     }
 
 
-
+    #background{
+        position: absolute;
+        bottom: 6%;
+    }
 
     /*Links*/
     ul {
@@ -56,11 +59,15 @@
 
 
         position: absolute;
-        bottom: 10%;
+        bottom: 1%;
+
+      
       }
 
       li {
         float: left;
+        color: #0000EE;
+        text-decoration: underline;  
       }
 
       li a {
@@ -76,15 +83,23 @@
 </head>
 <body>
 
-  <video id="videoBlur" width="729" height="560" autoplay muted></video>
-  <video id="video" width="720" height="560" autoplay muted></video>
+  <video id="videoBlur" width="820" height="610" autoplay muted></video>
+  <video id="video" width="820" height="610" autoplay muted></video>
   
   <ul>
-    <li><a href="#home">Item 0</a></li>
-    <li><a href="#news">Item 1</a></li>
-    <li><a href="#contact">Item 2</a></li>
-    <li><a href="#about">Item 3</a></li>
+    <li><a >mouth</a></li>
+    <li><a >eyes</a></li>
+    <li><a >outline</a></li>
+    <li><a >mondrian</a></li>
+    <li><a >liberman</a></li>
+    <li><a >eh?</a></li>
   </ul>
+
+
+ <div id = "background">
+  <input type="checkbox" id="backgroundcheck" name="backgroundcheck1"checked>
+  <label for="backgroundcheck1">background</label><br>
+</div>
 
 </body>
 </html>

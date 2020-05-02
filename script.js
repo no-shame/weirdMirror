@@ -1,4 +1,9 @@
-console.log();
+var bMouth = true;
+var bEyes = false;
+var bOutline = false;
+var bMondrian = false;
+var bLiberman = false;
+var bEh = false;
 
 const video = document.getElementById('video')
 const videoBlur = document.getElementById('videoBlur')
@@ -36,19 +41,24 @@ function getDist(v1, v2){
 }
 
 
-var leftEye, rightEye, mouth, leftEyeMid, rightEyeMid, mouthMid, eyeW, eyeH, mouthW, mouthH;
+var leftEye, rightEye, mouth, leftEyeMid, rightEyeMid, mouthMid, eyeW, eyeH, mouthW, mouthH, ctx, canvas;
 
 
 video.addEventListener('play', () => {
 
-  const canvas = faceapi.createCanvasFromMedia(video)
+  canvas = faceapi.createCanvasFromMedia(video)
+
+  canvas.onclick = function() { 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
   document.body.append(canvas)
   const displaySize = { width: video.width, height: video.height }
   faceapi.matchDimensions(canvas, displaySize)
   setInterval(async () => {
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks(true)
 
-    var ctx = canvas.getContext('2d')
+    ctx = canvas.getContext('2d')
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
 
     if(detections[0]){
@@ -67,7 +77,8 @@ video.addEventListener('play', () => {
          mouthW =  100
          mouthH = getDist(mouth[3], mouth[9]) * 2 + 20
 
-         ctx.clearRect(0, 0, canvas.width, canvas.height)
+         if(!bLiberman)
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
 
      
@@ -76,37 +87,108 @@ video.addEventListener('play', () => {
 
 
 
+     if(!bMondrian)
+      ctx.beginPath();
 
-     ctx.beginPath();
-     ctx.rect(leftEyeMid.x-eyeW/2, leftEyeMid.y-eyeH/2, eyeW, eyeH);
-     ctx.rect(rightEyeMid.x-eyeW/2, rightEyeMid.y-eyeH/2, eyeW, eyeH);
-     ctx.rect(moutheMid.x-mouthW/2, moutheMid.y-mouthH/2, mouthW, mouthH);
-     ctx.closePath();
-     ctx.clip();
+     if(bEyes || bLiberman || bEh){
+       ctx.rect(leftEyeMid.x-eyeW/2, leftEyeMid.y-eyeH/2, eyeW, eyeH);
+       ctx.rect(rightEyeMid.x-eyeW/2, rightEyeMid.y-eyeH/2, eyeW, eyeH);
+     }
+
+     if(bMouth || bLiberman || bEh){
+       ctx.rect(moutheMid.x-mouthW/2, moutheMid.y-mouthH/2, mouthW, mouthH);
+     }
+
+     if(!bMondrian){
+       ctx.closePath();
+       ctx.clip();
+     }
 
      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
      // restore the unclipped context (to remove clip)
      ctx.restore();
 
-     // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
-     // ctx.beginPath();
-     // ctx.fillStyle = "red";
-     // ctx.fillRect(leftEyeMid.x-eyeW/2, leftEyeMid.y-eyeH/2, eyeW, eyeH);
-     // // ctx.clip();
-     
-     // ctx.fillStyle = "yellow";
-     // ctx.fillRect(rightEyeMid.x-eyeW/2, rightEyeMid.y-eyeH/2, eyeW, eyeH);
-
-     // ctx.fillStyle = "blue";
-     // ctx.fillRect(moutheMid.x-mouthW/2, moutheMid.y-mouthH/2, mouthW, mouthH);
+     if(bOutline || bMondrian || bEh)
+       faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
 
-    //faceapi.draw.drawDetections(canvas, resizedDetections)
+     if(bMondrian){
+       ctx.beginPath();
+       ctx.fillStyle = "red";
+       ctx.fillRect(leftEyeMid.x-eyeW* 1.5/2, leftEyeMid.y-eyeH* 1.5/2, eyeW * 1.5, eyeH*1.5);
+       // ctx.clip();
+       
+       ctx.fillStyle = "yellow";
+       ctx.fillRect(rightEyeMid.x-eyeW* 1.5/2, rightEyeMid.y-eyeH* 1.5/2, eyeW * 1.5, eyeH*1.5);
+
+       ctx.fillStyle = "blue";
+       ctx.fillRect(moutheMid.x-eyeW* 1.5/2, moutheMid.y-eyeH* 1.5/2, eyeW * 1.5, eyeH*1.5);
+      }
+
+    
+      //faceapi.draw.drawDetections(canvas, resizedDetections)
+
     //faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
 
 
     //modes: just outline, piet mondre with black outline, no refresh unless click(with or without video dom element below canvas), combinations of mouth eyes and blur, maybe just face
   }, 25)
 })
+
+var modes = document.querySelectorAll("a")
+for (i = 0; i < modes.length; i++) {
+  modes[i].addEventListener('click', function() {
+    // alert(this.innerHTML);
+    this.style.color = "#551A8B";
+    videoBlur.style.display = "initial";
+    videoBlur.style.webkitFilter = "blur(12px)";
+    videoBlur.style.filter = "blur(12px)";
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    
+    bMouth = false;
+    bEyes = false;
+    bOutline = false;
+    bMondrian = false;
+    bLiberman = false;
+    bEh = false;
+
+
+    if(this.innerHTML == "mouth")
+      bMouth = true;
+    if(this.innerHTML == "eyes")
+      bEyes = true;
+    if(this.innerHTML == "outline"){
+      bOutline = true;
+      videoBlur.style.display = "none";
+    }
+    if(this.innerHTML == "mondrian"){
+      bMondrian = true;
+    }
+
+    if(this.innerHTML == "liberman"){
+      bLiberman = true;
+      videoBlur.style.webkitFilter = "blur(0px)";
+      videoBlur.style.filter = "blur(0px)";
+    }
+
+    if(this.innerHTML == "eh?"){
+      bEh = true;
+      videoBlur.style.display = "none";
+    }
+
+
+  });
+}
+
+
+document.querySelector("#backgroundcheck").onclick = function() {
+    if(this.checked){
+        videoBlur.style.display = "initial";
+    }else{
+        videoBlur.style.display = "none";
+    }
+}
