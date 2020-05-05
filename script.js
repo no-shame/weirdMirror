@@ -1,3 +1,5 @@
+console.log("tetting4");
+
 var bMouth = true;
 var bEyes = false;
 var bOutline = false;
@@ -15,15 +17,19 @@ Promise.all([
 ]).then(startVideo)
 
 
+
+
 function startVideo(){
-	  navigator.mediaDevices.getUserMedia(
-	  	{ video: {} })
-	    .then(function (stream) {
+   navigator.mediaDevices.getUserMedia(
+     { video: {} })
+     .then(function (stream) {
           videoBlur.srcObject = stream;
           video.srcObject = stream;
         })
-	    .catch(err => console.error(err));
+     .catch(err => console.error(err));
 }
+
+
 
 var Vector = function(x, y) {
   this.x = x || 0;
@@ -46,7 +52,8 @@ var leftEye, rightEye, mouth, leftEyeMid, rightEyeMid, mouthMid, eyeW, eyeH, mou
 
 video.addEventListener('play', () => {
 
-  canvas = faceapi.createCanvasFromMedia(video)
+ canvas = faceapi.createCanvasFromMedia(video)
+ ctx = canvas.getContext('2d')
 
   canvas.onclick = function() { 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -56,12 +63,17 @@ video.addEventListener('play', () => {
   const displaySize = { width: video.width, height: video.height }
   faceapi.matchDimensions(canvas, displaySize)
   setInterval(async () => {
+
+
+
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks(true)
 
-    ctx = canvas.getContext('2d')
+   
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
 
     if(detections[0]){
+
+         document.querySelector(".loader").style.display = "none";
 
          leftEye = resizedDetections[0].landmarks.getLeftEye();
          rightEye = resizedDetections[0].landmarks.getRightEye();
@@ -75,7 +87,7 @@ video.addEventListener('play', () => {
          eyeW = 50
          eyeH = 25
          mouthW =  100
-         mouthH = getDist(mouth[3], mouth[9]) * 2 + 20
+         mouthH = getDist(mouth[9], mouth[3]) * 1.5 + 10
 
          if(!bLiberman)
           ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -192,3 +204,7 @@ document.querySelector("#backgroundcheck").onclick = function() {
         videoBlur.style.display = "none";
     }
 }
+
+
+
+
